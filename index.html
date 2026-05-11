@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness Companion | Nutrition & Psychology</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --mint-green: #e8f5e9;
+            --deep-mint: #66bb6a;
+            --soft-white: #ffffff;
+            --accent-sage: #81c784;
+            --text-main: #2e7d32;
+            --text-sub: #558b2f;
+            --bg-gradient: linear-gradient(135deg, #f1f8e9 0%, #e8f5e9 100%);
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        
+        body { 
+            background: var(--bg-gradient); 
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; background: var(--soft-white); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; }
+
+        /* --- Cover Page --- */
+        #cover-page {
+            text-align: center;
+            padding: 80px 40px;
+            background: var(--mint-green);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90vh;
+        }
+
+        .cover-border { border: 2px solid var(--deep-mint); padding: 40px; border-radius: 15px; width: 80%; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: var(--text-main); }
+        .cover-info { margin: 30px 0; font-size: 1.2rem; }
+        .btn-start { 
+            background: var(--deep-mint); color: white; border: none; padding: 15px 40px; 
+            border-radius: 30px; cursor: pointer; font-size: 1.1rem; transition: 0.3s;
+        }
+        .btn-start:hover { background: var(--accent-sage); transform: translateY(-2px); }
+
+        /* --- Main App Layout --- */
+        #main-app { display: none; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--mint-green); padding-bottom: 15px; }
+
+        .section-card { 
+            background: var(--soft-white); border: 1px solid var(--mint-green); 
+            border-radius: 15px; padding: 20px; margin-top: 20px; 
+            transition: 0.3s;
+        }
+        .section-card:hover { border-color: var(--accent-sage); }
+        h3 { color: var(--text-main); border-left: 4px solid var(--deep-mint); padding-left: 10px; margin-top: 0; }
+
+        /* --- Form Elements --- */
+        label { display: block; margin: 10px 0 5px; font-weight: 600; font-size: 0.9rem; }
+        select, input, textarea { 
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;
+        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .flex-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        
+        .food-tag { 
+            padding: 5px 12px; background: var(--mint-green); border-radius: 20px; 
+            font-size: 0.85rem; cursor: pointer; border: 1px solid transparent;
+        }
+        .food-tag.active { background: var(--deep-mint); color: white; }
+
+        /* --- Icons & Specific Components --- */
+        .mood-btn { font-size: 1.5rem; cursor: pointer; opacity: 0.5; transition: 0.2s; }
+        .mood-btn.active { opacity: 1; transform: scale(1.2); }
+        
+        .btn-save { 
+            width: 100%; background: var(--deep-mint); color: white; border: none; 
+            padding: 15px; border-radius: 10px; margin-top: 30px; font-size: 1.1rem; cursor: pointer;
+        }
+
+        .summary-box { background: #f9fbf9; padding: 15px; border-radius: 10px; margin-top: 10px; }
+
+        @media (max-width: 600px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .cover-border { width: 95%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="cover-page">
+        <div class="cover-border">
+            <i class="fas fa-leaf" style="font-size: 3rem; color: var(--deep-mint);"></i>
+            <h1>Wellness Journal</h1>
+            <p style="font-style: italic; color: var(--text-sub);">A Path to Mindful Nourishment</p>
+            
+            <div class="cover-info">
+                <p><strong>Name:</strong> Syeda Konain Fatima</p>
+                <p><strong>Subject:</strong> Human Nutrition & Psychology</p>
+                <p><strong>CMS ID:</strong> 535933</p>
+                <p><strong>Assignment:</strong> Professional Wellness Tracker</p>
+            </div>
+            
+            <button class="btn-start" onclick="showApp()">Open Journal <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <div id="main-app">
+        <header>
+            <h2>Today's Entry</h2>
+            <input type="date" id="logDate" style="width: auto;">
+        </header>
+
+        <div class="section-card">
+            <h3><i class="fas fa-utensils"></i> Meal Logs</h3>
+            <div id="meal-container">
+                <label>Meal Type</label>
+                <select id="mealType">
+                    <option>Breakfast</option>
+                    <option>Lunch</option>
+                    <option>Dinner</option>
+                    <option>Snacks</option>
+                </select>
+
+                <label>Quick Select (Pakistani Cuisine)</label>
+                <div class="flex-group" id="foodTags">
+                    <span class="food-tag">Paratha</span>
+                    <span class="food-tag">Omelette</span>
+                    <span class="food-tag">Dal Chawal</span>
+                    <span class="food-tag">Roti Sabzi</span>
+                    <span class="food-tag">Chicken Karahi</span>
+                    <span class="food-tag">Biryani</span>
+                    <span class="food-tag">Yogurt/Raita</span>
+                    <span class="food-tag">Fruit Chaat</span>
+                </div>
+
+                <label>Custom Food / Notes</label>
+                <input type="text" id="customFood" placeholder="Describe your meal...">
+
+                <div class="grid-2">
+                    <div>
+                        <label>Portion Size</label>
+                        <select id="portionSize">
+                            <option>Small</option>
+                            <option>Medium</option>
+                            <option>Large</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Social Setting</label>
+                        <select id="socialSetting">
+                            <option>Alone</option>
+                            <option>With Family/Friends</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div>
+                        <label>Source</label>
+                        <select id="mealSource">
+                            <option>Home-cooked</option>
+                            <option>Outside/Restaurant</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Energy Level (1-10)</label>
+                        <input type="range" id="energyLevel" min="1" max="10" value="5">
+                    </div>
+                </div>
+
+                <div style="background: #fff9c4; padding: 10px; border-radius: 10px; margin-top: 15px;">
+                    <label><i class="fas fa-brain"></i> Mindful Eating & Distractions</label>
+                    <select id="mindfulness">
+                        <option>Focused on food (Mindful)</option>
+                        <option>Watching TV/Phone</option>
+                        <option>Working/Reading</option>
+                        <option>Stressed/Rushed</option>
+                    </select>
+                    <textarea id="mealNotes" placeholder="How did you feel after eating? (e.g., Bloated, Energized, Heavy)" rows="2" style="margin-top:10px"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="section-card">
+                <h3><i class="fas fa-bed"></i> Sleep</h3>
+                <label>Sleep Time</label>
+                <input type="time" id="sleepTime">
+                <label>Wake Time</label>
+                <input type="time" id="wakeTime">
+                <label>Quality</label>
+                <select id="sleepQuality">
+                    <option>Excellent</option>
+                    <option>Good</option>
+                    <option>Okay</option>
+                    <option>Poor</option>
+                </select>
+            </div>
+            <div class="section-card">
+                <h3><i class="fas fa-calendar-alt"></i> Cycle & Health</h3>
+                <label>Period Tracker</label>
+                <select id="periodStatus">
+                    <option>Not on period</option>
+                    <option>Day 1-3 (Heavy)</option>
+                    <option>Day 4-7 (Light)</option>
+                    <option>Spotting</option>
+                </select>
+                <label>Water (Glasses)</label>
+                <input type="number" id="waterIntake" value="0" min="0">
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h3><i class="fas fa-running"></i> Lifestyle</h3>
+            <select id="activity">
+                <option>Rest Day</option>
+                <option>Walk (30 mins)</option>
+                <option>Gym / Strength</option>
+                <option>Yoga / Meditation</option>
+                <option>Other</option>
+            </select>
+        </div>
+
+        <button class="btn-save" onclick="saveEntry()">Save Daily Log</button>
+
+        <div class="section-card" id="summarySection">
+            <h3><i class="fas fa-chart-line"></i> Weekly Dashboard</h3>
+            <div id="displaySummary" class="summary-box">
+                No logs saved yet. Start your journey today!
+            </div>
+            <button class="btn-start" style="width:100%; margin-top:15px;" onclick="generatePDF()">
+                <i class="fas fa-file-pdf"></i> Share with Dietitian
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Set default date
+    document.getElementById('logDate').valueAsDate = new Date();
+
+    function showApp() {
+        document.getElementById('cover-page').style.display = 'none';
+        document.getElementById('main-app').style.display = 'block';
+        loadEntries();
+    }
+
+    // Toggle Food Tags
+    document.querySelectorAll('.food-tag').forEach(tag => {
+        tag.addEventListener('click', function() {
+            this.classList.toggle('active');
+            let currentVal = document.getElementById('customFood').value;
+            if(this.classList.contains('active')) {
+                document.getElementById('customFood').value = currentVal + (currentVal ? ', ' : '') + this.innerText;
+            }
+        });
+    });
+
+    function saveEntry() {
+        const date = document.getElementById('logDate').value;
+        const entry = {
+            meal: document.getElementById('mealType').value,
+            foods: document.getElementById('customFood').value,
+            portion: document.getElementById('portionSize').value,
+            energy: document.getElementById('energyLevel').value,
+            mindfulness: document.getElementById('mindfulness').value,
+            notes: document.getElementById('mealNotes').value,
+            sleep: document.getElementById('sleepQuality').value,
+            water: document.getElementById('waterIntake').value,
+            period: document.getElementById('periodStatus').value,
+            activity: document.getElementById('activity').value
+        };
+
+        let logs = JSON.parse(localStorage.getItem('wellnessLogs')) || {};
+        if (!logs[date]) logs[date] = [];
+        logs[date].push(entry);
+        
+        localStorage.setItem('wellnessLogs', JSON.stringify(logs));
+        alert('Entry saved for ' + date + '! Keep going, you are doing great.');
+        loadEntries();
+    }
+
+    function loadEntries() {
+        const logs = JSON.parse(localStorage.getItem('wellnessLogs')) || {};
+        const display = document.getElementById('displaySummary');
+        
+        if (Object.keys(logs).length === 0) return;
+
+        let html = "<ul>";
+        for (let date in logs) {
+            const dayLogs = logs[date];
+            html += `<li><strong>${date}:</strong> ${dayLogs.length} entries recorded.</li>`;
+        }
+        html += "</ul>";
+        display.innerHTML = html;
+    }
+
+    function generatePDF() {
+        window.print(); // Simplest way to "Share" as PDF for a single file app
+    }
+</script>
+
+</body>
+</html>
